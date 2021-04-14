@@ -2,12 +2,12 @@
 
   imports = with hardware; [
     ../profiles/graphical
-    ../profiles/graphical/xmonad
+    ../profiles/graphical/sway
     ../profiles/security/yubikey
     ../profiles/development/android
     ../profiles/network
     ../profiles/ssh
-    ../profiles/builders/witness
+    #../profiles/builders/witness
     ../users/ben
     ../users/root
     # Hardware

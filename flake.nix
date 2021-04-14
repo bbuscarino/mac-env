@@ -3,7 +3,7 @@
 
   inputs =
     {
-      nixos.url = "nixpkgs/nixos-unstable";
+      nixos.url = "nixpkgs";
       override.url = "nixpkgs";
       ci-agent = {
         url = "github:hercules-ci/hercules-ci-agent";
@@ -36,7 +36,7 @@
       pkgs.url = "path:./pkgs";
       pkgs.inputs.nixpkgs.follows = "nixos";
       nixos-2003.url = "nixpkgs/nixos-20.03";
-      mobile-nixos.url = "github:archseer/mobile-nixos/flake-pr";
+      mobile-nixos.url = "github:bbuscarino/mobile-nixos/flakes";
     };
 
   outputs = inputs@{ nixos, self, utils, ... }:

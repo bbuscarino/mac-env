@@ -28,6 +28,7 @@
     overrideModulesPath = "${override}/nixos/modules";
     hardware = nixos-hardware.nixosModules;
     sopsModule = sops-nix.nixosModules.sops;
+    mobile = mobile-nixos.nixosModules;
   };
   # added to home-manager
   userModules = [

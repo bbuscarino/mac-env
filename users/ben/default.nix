@@ -28,8 +28,8 @@ in
         ../profiles/git
         ../profiles/gpg
         ../profiles/graphical
+        ../profiles/graphical/sway
         ../profiles/im
-        ../profiles/xmonad
         ../profiles/zsh
       ] ++ suites.base;
 
