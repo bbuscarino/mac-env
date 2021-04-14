@@ -57,7 +57,9 @@
         modules = import ./modules/module-list.nix;
         userModules = import ./users/modules/module-list.nix;
       } // {
-      inherit lib;
+        inherit lib;
+        #mobileConfigurations.proof = nixos.lib;
+      images.proof = self.nixosConfigurations.proof.config.system.build.u-boot;
       defaultTemplate = self.templates.flk;
       templates.flk.path = ./.;
       templates.flk.description = "flk template";

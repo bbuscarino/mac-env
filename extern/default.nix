@@ -3,7 +3,7 @@
   modules = [
     home.nixosModules.home-manager
     ci-agent.nixosModules.agent-profile
-  ];
+  ] ++ mobile-nixos.nixosModules;
 
   overlays = [
     emacs.overlay
@@ -28,7 +28,7 @@
     overrideModulesPath = "${override}/nixos/modules";
     hardware = nixos-hardware.nixosModules;
     sopsModule = sops-nix.nixosModules.sops;
-    mobile = mobile-nixos.nixosModules;
+    mobile = mobile-nixos.mobileDevices;
   };
   # added to home-manager
   userModules = [
