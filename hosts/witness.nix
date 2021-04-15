@@ -48,11 +48,11 @@
   swapDevices =
     [{ device = "/dev/disk/by-uuid/2bbdeb41-6a64-4341-a04f-a3f01cbe812a"; }];
 
-  fileSystems."/mnt/windows" = {
-    device = "/dev/disk/by-uuid/4E3604C83604B34F";
-    fsType = "ntfs";
-    options = [ "rw" "uid=${toString config.users.users.ben.uid}" ];
-  };
+  # fileSystems."/mnt/windows" = {
+  #   device = "/dev/disk/by-uuid/4E3604C83604B34F";
+  #   fsType = "ntfs";
+  #   options = [ "rw" "uid=${toString config.users.users.ben.uid}" ];
+  # };
 
   nix.maxJobs = lib.mkDefault 16;
   hardware.nvidia.prime.offload.enable = false;
