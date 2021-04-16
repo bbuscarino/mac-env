@@ -1,10 +1,6 @@
-{ lib, sopsModule, ... }: {
-  imports = [
-    sopsModule
-  ];
-
+{ lib, ... }: {
   sops = {
-    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFile = ../secrets.yaml;
     secrets = lib.genAttrs [
       "tailscale_key"
       "cache_private_key"

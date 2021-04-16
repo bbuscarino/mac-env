@@ -1,7 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   waylandEnablement = pkgs.writeShellScript "wayland-enablement" ''
-    export MOZ_ENABLE_WAYLAND=1
     export CLUTTER_BACKEND=wayland
     export QT_QPA_PLATFORM=wayland-egl
     export ECORE_EVAS_ENGINE=wayland-egl
@@ -10,6 +9,7 @@ let
     export _JAVA_AWT_WM_NONREPARENTING=1
     export NO_AT_BRIDGE=1
   '';
+
   swayRun = pkgs.writeShellScript "sway-run" ''
     export XDG_SESSION_TYPE=wayland
     export XDG_SESSION_DESKTOP=sway
@@ -19,19 +19,19 @@ let
   '';
 in
 {
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true; # so that gtk works properly
-    extraPackages = with pkgs; [
-      swaylock
-      swayidle
-      wl-clipboard
-      mako # notification daemon
-      alacritty # Alacritty is the default terminal in the config
-      dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
-    ];
-  };
-
+  # programs.sway = {
+  #   enable = true;
+  #   wrapperFeatures.gtk = true; # so that gtk works properly
+  #   extraPackages = with pkgs; [
+  #     swaylock
+  #     swayidle
+  #     wl-clipboard
+  #     mako # notification daemon
+  #     alacritty # Alacritty is the default terminal in the config
+  #     dmenu # Dmenu is the default in the config but i recommend wofi since its wayland native
+  #   ];
+  # };
+  
   services.greetd = {
     enable = true;
     restart = true;

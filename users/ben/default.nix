@@ -14,7 +14,7 @@ in
     path = "${config.users.users.ben.home}/.gitconfig";
   };
 
-  home-manager.users.ben = { home, suites, ... }:
+  home-manager.users.ben = { home, ... }:
     {
       imports = [
         ../profiles/alacritty
@@ -28,10 +28,10 @@ in
         ../profiles/git
         ../profiles/gpg
         ../profiles/graphical
-        ../profiles/graphical/sway
+        ../profiles/graphical/xmonad
         ../profiles/im
         ../profiles/zsh
-      ] ++ suites.base;
+      ];
 
       home.file = {
         ".background-image".source = ../../assets/wallpaper.png;

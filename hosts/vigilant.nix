@@ -1,21 +1,16 @@
-{ lib, config, pkgs, hardware, suites, ... }: {
+{ lib, config, pkgs, ... }: {
 
-  imports = with hardware; [
+  imports = [
     ../profiles/graphical
     ../profiles/graphical/sway
     ../profiles/security/yubikey
     ../profiles/development/android
     ../profiles/network
+    ../profiles/core
     ../profiles/ssh
-    #../profiles/builders/witness
-    ../users/ben
+    ../users/ben/laptop.nix
     ../users/root
-    # Hardware
-    common-cpu-amd
-    common-pc
-    common-pc-ssd
-    lenovo-thinkpad-t14s
-  ] ++ suites.base;
+  ];
 
   boot = {
     kernelPackages = pkgs.linuxPackages_5_10;

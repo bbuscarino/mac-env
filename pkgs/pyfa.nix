@@ -19,11 +19,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "pyfa";
-  version = "2.32.0";
+  version = "2.34.0";
 
   src = fetchurl {
     url = "https://github.com/pyfa-org/Pyfa/archive/v${version}.tar.gz";
-    sha256 = "0K4gkygZH2ucN2u5cv+NYTLjhPVMqsEYuCxOihYJb2Q=";
+    sha256 = "sha256-cM8WqGfMMQEb6SKi5qJw4M3mraigY820gplStLIyJhE=";
   };
 
   buildPhase = ''

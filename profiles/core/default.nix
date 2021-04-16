@@ -2,18 +2,15 @@
 let inherit (lib) fileContents;
 in
 {
-  imports = [
-    ../../secrets.nix
-  ];
   nix.systemFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
 
+  hardware.enableRedistributableFirmware = lib.mkDefault true;
   environment = {
     pathsToLink = [ "/share/zsh" ];
     systemPackages = with pkgs; [
       binutils
       coreutils
       curl
-      deploy-rs
       direnv
       dnsutils
       dosfstools
@@ -34,6 +31,7 @@ in
       utillinux
       whois
     ];
+
 
 
     shellAliases =

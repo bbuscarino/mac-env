@@ -32,6 +32,12 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
     systemdIntegration = true;
+    extraOptions = [
+      "--verbose"
+      "--debug"
+      "--unsupported-gpu"
+      "--my-next-gpu-wont-be-nvidia"
+    ];
     config = {
       gaps = {
         smartBorders = "on";
@@ -285,20 +291,6 @@ in
             interval = 300;
             json = true;
           }
-          {
-            block = "toggle";
-            text = "DP-6";
-            command_state = "${swayOutputIsActive} DP-6";
-            command_on = "${pkgs.sway}/bin/swaymsg output DP-6 enable";
-            command_off = "${pkgs.sway}/bin/swaymsg output DP-6 disable";
-          }
-          {
-            block = "toggle";
-            text = "DP-5";
-            command_state = "${swayOutputIsActive} DP-5";
-            command_on = "${pkgs.sway}/bin/swaymsg output DP-5 enable";
-            command_off = "${pkgs.sway}/bin/swaymsg output DP-5 disable";
-          }
           #          {
           #           block = "bluetooth";
           #          mac = "CC:98:8B:93:08:1F";
@@ -343,4 +335,6 @@ in
       };
     };
   };
+
+
 }

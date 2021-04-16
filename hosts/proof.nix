@@ -1,4 +1,4 @@
-{ lib, config, pkgs, mobile, ... }:
+{ lib, config, pkgs, ... }:
 {
   imports = [
     ../profiles/graphical
@@ -7,7 +7,5 @@
     ../profiles/ssh
     ../users/ben
     ../users/root
-    mobile.pine64-pinephone
   ];
-  nixpkgs.system = "aarch64-linux";
 }
