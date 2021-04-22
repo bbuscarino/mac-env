@@ -2,13 +2,15 @@
 
   imports = [
     ../profiles/graphical
-    ../profiles/graphical/sway
+    ../profiles/graphical/x
+    ../profiles/graphical/xmonad
     ../profiles/security/yubikey
     ../profiles/development/android
     ../profiles/network
     ../profiles/core
+    ../profiles/virt
     ../profiles/ssh
-    ../users/ben/laptop.nix
+    ../users/ben
     ../users/root
   ];
 
@@ -68,7 +70,22 @@
       night = 3700;
     };
   };
-
+  hardware = {
+    pulseaudio = {
+      enable = true;
+      package = pkgs.pulseaudioFull;
+      extraModules = [ pkgs.pulseaudio-modules-bt ];
+    };
+    bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          ControllerMode = "bredr";
+          Enable = "Source,Sink,Media,Socket";
+        };
+      };
+    };
+  };
   services.xserver.displayManager.sessionCommands =
     let
       customLayout = pkgs.writeText "xkb-layout" ''
@@ -83,11 +100,8 @@
       '';
     in
     ''
-      # setxkbmap -option caps:none
       ${pkgs.xorg.xmodmap}/bin/xmodmap ${customLayout}
     '';
-
-
 
   programs.light.enable = true;
   services.actkbd = {

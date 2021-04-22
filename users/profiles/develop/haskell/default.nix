@@ -1,6 +1,6 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
-    ormolu
+    # ormolu
     haskellPackages.haskell-language-server
     stack
     ghc

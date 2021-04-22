@@ -32,19 +32,13 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
     systemdIntegration = true;
-    extraOptions = [
-      "--verbose"
-      "--debug"
-      "--unsupported-gpu"
-      "--my-next-gpu-wont-be-nvidia"
-    ];
     config = {
       gaps = {
         smartBorders = "on";
       };
       fonts = [ "Iosevka" ];
-      modifier = "Mod4";
-      menu = "${pkgs.dmenu-wayland}/bin/dmenu-wl_run -i";
+      modifier = "Mod3";
+      menu = "${pkgs.wofi}/bin/wofi";
       terminal = "${pkgs.alacritty}/bin/alacritty";
       keybindings =
         let
@@ -58,6 +52,18 @@ in
                 cfg = config.wayland.windowManager.sway;
               in
               {
+                "${mod}+F1" = "exec ${pkgs.symlinkJoin {
+                  name = "chromium";
+                  paths = [ pkgs.chromium ];
+                  buildInputs = [ pkgs.makeWrapper ];
+                  postBuild = ''
+                      wrapProgram $out/bin/chromium \
+                       --add-flags "--enable-features=UseOzonePlatform" \
+                       --add-flags "--ozone-platform=wayland"
+                  '';
+                }}/bin/chromium";
+                "${mod}+F2" = "exec ${pkgs.emacs}/bin/emacs";
+
                 "${mod}+Return" = "exec ${cfg.config.terminal}";
                 "${super}+q" = "kill";
                 "${mod}+d" = "exec ${cfg.config.menu}";
@@ -183,7 +189,7 @@ in
       bars = [
         {
           statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ~/.config/i3status-rust/config-top.toml";
-          fonts = [ "Iosevka 10" ];
+          #fonts = [ "Iosevka 10" ];
           position = "top";
           extraConfig =
             "
@@ -217,10 +223,30 @@ in
         }
       ];
       input = {
-        "type:keyboard" = {
-          repeat_delay = "300";
-          repeat_rate = "20";
-        };
+        #   "type:keyboard" = {
+        #     repeat_delay = "300";
+        #     repeat_rate = "20";
+        #     xkb_file = ''
+        #       xkb_keycodes { include "evdev+aliases(qwerty)" };
+        #       xkb_types    { include "default" };
+        #       xkb_compat   { include "complete" };
+        #       xkb_symbols  {
+        #          include "pc+us(qwerty)+inet(evdev)+ctrl(nocaps)"
+        #   // Less than/Greater than/Pipe key on Swedish keyboards becomes Compose
+        #   //replace key <LSGT> { [ Multi_key ] };
+        #   // Scroll Lock becomes Compose
+        #   //replace key <SCLK> { [ Multi_key ] };
+        #       };
+        #       xkb_geometry { include "pc(pc105)" };
+        #   //clear lock
+        #   //clear lock
+        #   //clear mod3
+        #   //clear mod4
+        #   //keycode 66 = Hyper_L
+        #   //add mod3 = Hyper_L Hyper_R
+        #   //add mod4 = Super_L Super_R
+        # '';
+        #   };
         "type:touchpad" = {
           dwt = "enabled";
           middle_emulation = "enabled";
@@ -228,38 +254,14 @@ in
           tap = "enabled";
         };
       };
-      # output = {
-      #   DP-5 = {
-      #     pos = "1440 0";
-      #     subpixel = "rgb";
-      #     disable = ""; #disable output on start
-      #   };
-      #   DP-6 = {
-      #     pos = "0 0";
-      #     transform = "90";
-      #     subpixel = "rgb";
-      #     disable = ""; #disable output on start
-      #   };
-      #   eDP-1 = {
-      #     subpixel = "rgb";
-      #     scale = "2";
-      #     pos = "1440 1440";
-      #   };
-      # };
       window = {
         titlebar = false;
         hideEdgeBorders = "smart";
         commands = [
-          { command = "floating enable"; criteria = { app_id = "gsimplecal"; }; }
           { command = "floating enable"; criteria = { app_id = "chromium"; }; }
-          { command = "floating enable"; criteria = { app_id = "mpv"; }; }
-          { command = "floating enable, move scratchpad"; criteria = { class = "Appgate SDP"; }; }
           { command = "floating enable, resize set width 600px height 800px"; criteria = { title = "Save File"; }; }
           { command = "inhibit_idle visible, floating enable"; criteria = { title = "(is sharing your screen)|(Sharing Indicator)"; }; }
-          { command = "inhibit_idle visible"; criteria = { title = "(Blue Jeans Network)|(Meet)"; }; }
-          { command = "move container to workspace 2"; criteria = { app_id = "^(?i)org.qutebrowser.qutebrowser$"; }; }
-          { command = "move container to workspace 3"; criteria = { app_id = "^(?i)Chromium-browser$"; }; }
-          { command = "move container to workspace 4"; criteria = { app_id = "^(?i)Firefox$"; }; }
+          { command = "move container to workspace 1"; criteria = { app_id = "^(?i)Chromium-browser$"; }; }
         ];
       };
       startup = [
@@ -291,26 +293,13 @@ in
             interval = 300;
             json = true;
           }
-          #          {
-          #           block = "bluetooth";
-          #          mac = "CC:98:8B:93:08:1F";
-          #         label = " WH-1000XM3";
-          #      }
-          #      {
-          #        block = "toggle";
-          #       text = "A2DP/HSP";
-          #      command_state = "${a2dpIsActive}";
-          #     command_on = "${setProfile} a2dp-sink-aptx_hd";
-          #    command_off = "${setProfile} headset-head-unit";
-          #   interval = 5;
-          # }
           { block = "uptime"; }
           { block = "cpu"; format = "{utilization} {frequency}"; }
-          #          { block = "net"; device = "wlp0s20f3"; ssid = true; signal_strength = true; }
+          { block = "net"; device = "wlp3s0"; ssid = true; signal_strength = true; }
           { block = "backlight"; }
           { block = "temperature"; collapsed = false; }
           { block = "sound"; driver = "pulseaudio"; on_click = "${pkgs.pavucontrol}/bin/pavucontrol"; }
-          # { block = "battery"; driver = "upower"; }
+          { block = "battery"; driver = "upower"; }
           { block = "time"; on_click = "${pkgs.gsimplecal}/bin/gsimplecal"; }
         ];
         settings = {

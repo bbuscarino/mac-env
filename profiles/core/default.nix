@@ -135,14 +135,26 @@ in
 
     trustedUsers = [ "root" "@wheel" ];
 
-    extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
-      fallback = true
-      min-free = 536870912
-      builders-use-substitutes = true
-      secret-key-files = ${config.sops.secrets.cache_private_key.path}
-    '';
+    extraOptions =
+      let
+        experimentalFeatures = [
+          "flakes"
+          "nix-command"
+          "ca-references"
+          "ca-derivations"
+        ];
+      in
+      ''
+        experimental-features = ${lib.concatStringsSep " "
+          experimentalFeatures
+        }  
+        keep-outputs = true
+        keep-derivations = true
+        fallback = true
+        min-free = 536870912
+        builders-use-substitutes = true
+        secret-key-files = ${config.sops.secrets.cache_private_key.path}
+      '';
 
   };
 
