@@ -10,7 +10,7 @@
     ../profiles/network
     ../profiles/virt
     ../profiles/ssh
-    ../profiles/hydra
+    #../profiles/hydra
     ../profiles/core
     ../users/ben
     ../users/root

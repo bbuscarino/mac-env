@@ -1,57 +1,81 @@
 { lib, config, pkgs, modulesPath, ... }:
 {
   imports = [
-    ../profiles/network
-    ../profiles/ssh
-    ../users/serve
+    #../profiles/network
+    ../profiles/ssh/server
+    ../profiles/core
+    ../profiles/installer/raspberry-pi.nix
+    ../users/ben/server.nix
     ../users/root
-    "${modulesPath}/installer/sd-card/sd-image-raspberrypi-installer.nix"
+    
   ];
-  nixpkgs.crossSystem = {
-    config = "aarch64-linux";
-  };
-  boot = {
-    loader.grub.enable = false;
-    loader.raspberryPi.enable = true;
-    loader.raspberryPi.version = 4;
-    loader.raspberryPi.firmwareConfig = ''
-      dtoverlay=disable-wifi
-      dtoverlay=disable-bt
-      dtparam=sd_poll_once
-    '';
-    loader.raspberryPi.uboot.enable = true;
-    loader.raspberryPi.uboot.configurationLimit = 5;
-    loader.generic-extlinux-compatible.enable = true;
+    system.stateVersion = "21.03";
 
-    tmpOnTmpfs = false;
-    cleanTmpDir = true;
+    nix.nixPath = [];
+    nix.gc.automatic = true;
 
-    kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi1;
+    # force cross-compilation here
+    #nixpkgs.system = "x86_64-linux"; # should be set in flake.nix anyway
+    nixpkgs.crossSystem = lib.systems.examples.raspberryPi;
 
-    # note, the annoying SD card messages when booting from not SD:
-    # https://github.com/raspberrypi/linux/issues/3657
+    documentation.enable = false;
+    documentation.doc.enable = false;
+    documentation.info.enable = false;
+    documentation.nixos.enable = false;
 
-    initrd.availableKernelModules = [
-      "pcie_brcmstb"
-      "bcm_phy_lib"
-      "broadcom"
-      "mdio_bcm_unimac"
-      "genet"
-      "vc4"
-      "bcm2835_dma"
-      "i2c_bcm2835"
-      "xhci_pci"
-      "nvme"
-      "usb_storage"
-      "sd_mod"
-      "uas" # necessary for my UAS-enabled NVME-USB adapter
-    ];
-    kernelModules = config.boot.initrd.availableKernelModules;
+    security.polkit.enable = false;
+    services.udisks2.enable = false;
+    boot.enableContainers = false;
+    programs.command-not-found.enable = false;
+    environment.noXlibs = true;
 
-    initrd.supportedFilesystems = [ "zfs" ];
-    supportedFilesystems = [ "zfs" ];
-  };
-  hardware = {
-    enableRedistributableFirmware = true;
-  };
+    nix.package = lib.mkForce pkgs.nix;
+
+    boot.initrd.availableKernelModules = lib.mkForce [ 
+      "mmc_block"
+      "usbhid"
+      "hid_generic"
+      "hid_microsoft"
+     ];
+
+    # rpizero stuffs
+    # boot.otg = {
+    #   enable = true;
+    #   module = "ether";
+    # };
+
+    # fileSystems = {
+    #   "/boot" = {
+    #     device = "/dev/disk/by-partlabel/FIRMWARE";
+    #     fsType = "vfat";
+    #     options = [ "nofail" ];
+    #   };
+    #   "/" = {
+    #     device = "/dev/disk/by-partlabel/NIXOS";
+    #     fsType = "ext4";
+    #   };
+    # };
+
+    boot = {
+      tmpOnTmpfs = false;
+      cleanTmpDir = true;
+
+      kernelPackages = pkgs.lib.mkForce pkgs.linuxPackages_rpi0;
+
+      loader.grub.enable = false;
+      loader.raspberryPi = {
+        enable = true;
+        uboot.enable = true;
+        version = 0;
+      };
+    };
+
+    networking = {
+      hostName = "rpi";
+      #firewall.enable = true;
+      #firewall.allowedTCPPorts = [ 22 ];
+      networkmanager.enable = false;
+      wireless.enable = lib.mkForce false;
+      wireless.iwd.enable = true;
+    };
 }
