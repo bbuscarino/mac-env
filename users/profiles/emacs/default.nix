@@ -4,11 +4,15 @@ let
   inherit (lib) mkIf optionals;
 in
 {
-  programs.doom-emacs = {
+  programs.doom-emacs =
+    let
+      emacs = pkgs.emacsGcc;
+    in 
+    {
     enable = true;
-    package = pkgs.emacsGcc;
+    package = emacs;
     doomPrivateDir = ./.doom.d;
-    extraPackages = with (pkgs.emacsPackagesFor pkgs.emacsGcc); [ vterm ];
+    # extraPackages = with (pkgs.emacsPackagesFor emacs); [ vterm ];
   };
   home = {
     sessionPath = [ "$HOME/.emacs.d/bin" ];

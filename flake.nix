@@ -32,7 +32,7 @@
         inputs.nixpkgs.follows = "nixos";
       };
       nur.url = "github:nix-community/NUR";
-      naersk.url = "github:nmattia/naersk";
+      naersk.url = "github:nmattia/naersk?rev=32e3ba39d9d83098b13720a4384bdda191dd0445";
       naersk.inputs.nixpkgs.follows = "unstable";
       nixos-hardware.url = "github:nixos/nixos-hardware";
       sops-nix.url = "github:Mic92/sops-nix";

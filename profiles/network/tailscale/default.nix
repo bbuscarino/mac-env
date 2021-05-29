@@ -2,9 +2,10 @@
   services.tailscale.enable = true;
   networking.nameservers = [
     # Tailscale
-    "100.100.100.100"
     "8.8.8.8"
     "8.8.4.4"
+    "1.1.1.1"
+    "100.100.100.100"
   ];
   networking.firewall.allowedUDPPorts = [ config.services.tailscale.port ];
   systemd.services.tailscale-autoconnect = {

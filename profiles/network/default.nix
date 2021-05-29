@@ -2,7 +2,7 @@
   imports = [
     ./networkmanager
     ./tailscale
-    ./resolved
+    # ./resolved
     # ./adblocking
     # ./stubby
   ];
