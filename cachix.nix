@@ -3,7 +3,7 @@
 let
   folder = ./cachix;
   toImport = name: value: folder + ("/" + name);
-  filterCaches = key: value: value == "regular" && lib.hasSuffix ".nix" key;
+  filterCaches = key: value: value == "regular" && lib.hasSuffix ".nix" key && key != "machines.nix";
   imports = lib.mapAttrsToList toImport (lib.filterAttrs filterCaches (builtins.readDir folder));
 in
 {

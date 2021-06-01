@@ -40,17 +40,26 @@
       mobile-nixos.url = "github:bbuscarino/mobile-nixos/flakes";
     };
 
-  outputs = inputs@{ nixos, self, utils, ... }:
+  outputs = inputs@{ nixos, darwin, self, utils, ... }:
     let
       nixosHost = args@{ modules ? [ ], extraArgs ? { inherit inputs; }, ... }: args // {
         modules = modules ++ [
-          inputs.home.nixosModules.home-manager
+          inputs.home.nixosModule
           inputs.sops-nix.nixosModules.sops
           inputs.ci-agent.nixosModules.agent-profile
           ./modules/secrets.nix
           ./cachix.nix
         ] ++ map builtins.import (import ./modules/module-list.nix);
         extraArgs = extraArgs // { hardware = inputs.nixos-hardware.nixosModules; };
+      };
+      darwinHost = args@{ modules ? [ ], extraArgs ? { inherit inputs; }, ... }: args // {
+        system = "x86_64-darwin";
+        modules = modules ++ [
+          inputs.home.darwinModule
+          ./cachix.nix
+        ];
+        builder = args: darwin.lib.darwinSystem (removeAttrs args [ "system" ]);
+        output = "darwinConfigurations";
       };
     in
     utils.lib.systemFlake
@@ -121,6 +130,9 @@
           proof = nixosHost {
             system = "aarch64-linux";
             modules = [ ./hosts/proof.nix inputs.mobile-nixos.nixosModules.pine64-pinephone ];
+          };
+          macbook = darwinHost {
+            modules = [ ./hosts/macbook.nix ];
           };
         };
 
