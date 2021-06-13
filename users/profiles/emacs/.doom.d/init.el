@@ -24,7 +24,6 @@
  :editor
  evil
  fold
- multiple-cursors
  (format +onsave)
  (parinfer +rust)
  snippets
@@ -50,11 +49,8 @@
  debugger
  direnv
  (docker +lsp)
- (eval +overlay)
- (lookup +docsets)
  (lsp +peek)
  (magit +forge)
- prodigy
  terraform
  ;;jira
 
@@ -72,17 +68,11 @@
  (javascript +lsp)
  (markdown +grip)
  (org +brain +dragndrop +pandoc +present +pretty +roam)
- (purescript +lsp)
  (python +lsp +pyright +poetry +cython (:if IS-MAC +pyenv))
  (sh +lsp)
  (web +lsp)
- (dart +flutter +lsp)
- data  ;; CSV, etc
- elm
  emacs-lisp
- hy
  json
  nix
- plantuml
  ;;tdf
  yaml)
