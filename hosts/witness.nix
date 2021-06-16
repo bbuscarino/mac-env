@@ -33,7 +33,7 @@
   services.flatpak.enable = true;
   # nix.distributedBuilds = true;
   boot = {
-    kernelPackages = pkgs.linuxPackages_5_11;
+    kernelPackages = pkgs.linuxPackages_5_12;
     # Turn on magical sysrq key for magic
     kernel.sysctl."kernel.sysrq" = 1;
     tmpOnTmpfs = true;
